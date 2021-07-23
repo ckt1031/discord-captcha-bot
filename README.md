@@ -23,6 +23,8 @@ This is an advanced reCaptcha verification system for new members in discord ser
 ```
 TOKEN=
 CLIENT_SECRET=
+RECAPTCHA_SITEKEY=
+RECAPTCHA_SECRET=
 ```
 
 ## Setup Steps
