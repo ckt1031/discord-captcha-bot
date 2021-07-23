@@ -26,7 +26,7 @@ server.use(
   })
 );
 
-server.use(express.static('assets'));
+server.use(express.static("assets"));
 
 server.all("/", (req, res) => {
   res.send("Bot is Running!");
@@ -47,7 +47,7 @@ server.get(`/verify`, async (req, res) => {
     }
   };
 
-  request(options, function (error, response, body) {
+  request(options, function(error, response, body) {
     if (error) throw new Error(error);
     var oauth_parsed = JSON.parse(body);
     var options = {
@@ -55,16 +55,20 @@ server.get(`/verify`, async (req, res) => {
       url: "https://discord.com/api/users/@me",
       headers: { authorization: `Bearer ${oauth_parsed.access_token}` }
     };
-    request(options, async function (error, response, body) {
+    request(options, async function(error, response, body) {
       if (error) throw new Error(error);
       if (req.session.verify_userid) {
         return res.render(__dirname + "/html/captcha.html", {
           recaptcha_sitekey: process.env.RECAPTCHA_SITEKEY
         });
-      };
+      }
       if (response.statusCode != 200) {
         return res.redirect(
-          `https://discord.com/oauth2/authorize?client_id=${config.client_id}&redirect_uri=${config.callback_url}&response_type=code&scope=guilds.join%20email%20identify`
+          `https://discord.com/oauth2/authorize?client_id=${
+            config.client_id
+          }&redirect_uri=${
+            config.callback_url
+          }&response_type=code&scope=guilds.join%20email%20identify`
         );
       }
       var parsed = JSON.parse(body);
@@ -79,11 +83,11 @@ server.get(`/verify`, async (req, res) => {
         return res.render(__dirname + "/html/success.html", {
           success_msg: "You already verified!"
         });
-      };
+      }
 
       req.session.verify_userid = parsed.id;
 
-      if (config.verified_email_required = true || parsed.verified) {
+      if ((config.verified_email_required = true || parsed.verified)) {
         req.session.verify_status = "waiting_recaptcha";
         return res.render(__dirname + "/html/captcha.html", {
           recaptcha_sitekey: process.env.RECAPTCHA_SITEKEY
@@ -93,7 +97,7 @@ server.get(`/verify`, async (req, res) => {
         return res.render(__dirname + "/html/error.html", {
           error_msg: "Please verify your email!"
         });
-      };
+      }
     });
   });
 });
@@ -101,7 +105,7 @@ server.get(`/verify`, async (req, res) => {
 server.post("/verify/solve/", async (req, res) => {
   if (!req.session.verify_userid || !req.body["g-recaptcha-response"]) {
     return res.redirect("/verify");
-  };
+  }
 
   var options = {
     method: "POST",
@@ -115,33 +119,30 @@ server.post("/verify/solve/", async (req, res) => {
       response: req.body["g-recaptcha-response"]
     }
   };
-  request(options, async function (error, response, body) {
+  request(options, async function(error, response, body) {
     if (error) throw new Error(error);
     const parsed = JSON.parse(body);
-    console.log(parsed)
+    console.log(parsed);
     if (parsed.success) {
-      const embed = new Discord.MessageEmbed()
+      const embed = new Discord.MessageEmbed();
       let guildGet = client.guilds.cache.get(config.server_id);
       let userfetch = await client.users.fetch(req.session.verify_userid);
       const member = await guildGet.members.fetch(userfetch.id);
       await member.roles.add(config.verifiedrole_id, `Verified`);
       try {
         req.session.verify_status = "done";
-        embed.setTitle(":white_check_mark: Verified")
-        embed.setDescription(
-          "Now you can access to the server!"
-        )
+        embed.setTitle(":white_check_mark: Verified");
+        embed.setDescription("Now you can access to the server!");
         embed.setColor("GREEN");
         await member.send(embed);
         return res.redirect("/verify/succeed");
       } catch (e) {
         return res.redirect("/verify/succeed");
-      };
+      }
     } else {
       res.redirect("/verify");
     }
   });
-
 });
 
 server.get("/verify/succeed", async (req, res) => {
