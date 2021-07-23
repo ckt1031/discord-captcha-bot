@@ -1,6 +1,7 @@
 "use strict";
 
 const express = require("express");
+const Discord = require("discord.js");
 const bodyParser = require("body-parser");
 const config = require("./config.json");
 const server = express();
@@ -79,8 +80,10 @@ server.get(`/verify`, async (req, res) => {
           success_msg: "You already verified!"
         });
       };
+
       req.session.verify_userid = parsed.id;
-      if (config.verified_email_required = false || parsed.verified) {
+
+      if (config.verified_email_required = true || parsed.verified) {
         req.session.verify_status = "waiting_recaptcha";
         return res.render(__dirname + "/html/captcha.html", {
           recaptcha_sitekey: process.env.RECAPTCHA_SITEKEY
@@ -95,63 +98,60 @@ server.get(`/verify`, async (req, res) => {
   });
 });
 
-server.post("/solve/", async (req, res) => {
-  if (!req.session.verify_userid) {
-    res.redirect("/verify");
-  } else if (
-    !req.body["g-recaptcha-response"] ||
-    Boolean(req.body.accept_rules_checkbox) === false
-  ) {
+server.post("/verify/solve/", async (req, res) => {
+  if (!req.session.verify_userid || !req.body["g-recaptcha-response"]) {
     return res.redirect("/verify");
-  } else {
-    var options = {
-      method: "POST",
-      url: "https://www.google.com/recaptcha/api/siteverify",
-      headers: {
-        "content-type":
-          "multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW"
-      },
-      formData: {
-        secret: process.env.RECAPTCHA_SECRET,
-        response: req.body["g-recaptcha-response"]
-      }
-    };
-    request(options, async function (error, response, body) {
-      if (error) throw new Error(error);
-      const parsed = JSON.parse(body);
-      if (parsed.success) {
-        const embed = new Discord.MessageEmbed()
-        let guildGet = client.guilds.cache.get(config.server_id);
-        let userfetch = await client.users.fetch(req.session.verify_userid);
-        const member = await guildGet.members.fetch(userfetch.id);
-        await member.roles.add(config.verifiedrole_id, `Verified`);
-        try {
-          req.session.verify_status = "done";
-          embed.setTitle(":white_check_mark: Verified")
+  };
+
+  var options = {
+    method: "POST",
+    url: "https://www.google.com/recaptcha/api/siteverify",
+    headers: {
+      "content-type":
+        "multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW"
+    },
+    formData: {
+      secret: process.env.RECAPTCHA_SECRET,
+      response: req.body["g-recaptcha-response"]
+    }
+  };
+  request(options, async function (error, response, body) {
+    if (error) throw new Error(error);
+    const parsed = JSON.parse(body);
+    console.log(parsed)
+    if (parsed.success) {
+      const embed = new Discord.MessageEmbed()
+      let guildGet = client.guilds.cache.get(config.server_id);
+      let userfetch = await client.users.fetch(req.session.verify_userid);
+      const member = await guildGet.members.fetch(userfetch.id);
+      await member.roles.add(config.verifiedrole_id, `Verified`);
+      try {
+        req.session.verify_status = "done";
+        embed.setTitle(":white_check_mark: Verified")
         embed.setDescription(
-            "Now you can access to the server!"
-          )
+          "Now you can access to the server!"
+        )
         embed.setColor("GREEN");
-          await member.send(embedSS);
-          return res.redirect("/verify/succeed");
-        } catch (e) {
-          return res.redirect("/verify/succeed");
-        };
-      } else {
-        res.redirect("/verify");
-      }
-    });
-  }
+        await member.send(embed);
+        return res.redirect("/verify/succeed");
+      } catch (e) {
+        return res.redirect("/verify/succeed");
+      };
+    } else {
+      res.redirect("/verify");
+    }
+  });
+
 });
 
-server.get("/succeed", async (req, res) => {
+server.get("/verify/succeed", async (req, res) => {
   if (!req.session.verify_userid) return res.redirect("/verify");
   if (req.session.verify_status != "done") return res.redirect("/verify");
   res.sendFile(__dirname + "/html/verified.html");
   return req.session.destroy();
 });
 
-server.get("/logout", async (req, res) => {
+server.get("/verify/logout", async (req, res) => {
   if (!req.session.verify_userid)
     return res.render(__dirname + "/html/error.html", {
       error_msg: `You did not login!`
