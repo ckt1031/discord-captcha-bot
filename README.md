@@ -13,7 +13,7 @@ This is an advanced reCaptcha verification system for new members in discord ser
 {
   "server_id"               : String - Your Server ID.
   "verified_email_required" : Boolean - Default true. Reqirement of user with verified email.
-  "dark_theme"              : String - "light" or "dark" in verify page theme.
+  "dark_theme"              : String - Default false, set true for dark theme.
   "verifiedrole_id"         : String - Your Server Verified Role ID.
   "client_id"               : String - Your Client ID.
   "callback_url"            : url - Your website url. Example: "https://example.com/verify"
