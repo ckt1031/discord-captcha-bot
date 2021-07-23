@@ -1,0 +1,38 @@
+<html>
+
+<head>
+	<title>Veriication</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+	<script src="https://www.google.com/recaptcha/api.js" async defer>
+
+	</script>
+	<link rel="stylesheet" href="../style.css" />
+</head>
+
+<body>
+	<div class="main">
+		<h1>Verification</h1>
+		<h4>
+			Please solve the reCAPTCHA following below to make sure you are not a robot.
+		</h4>
+		<form action="/verify/solve" method="POST" id="recaptchaForm">
+			<center>
+				<div id="recaptcha_box" class="g-recaptcha" data-sitekey="<%= recaptcha_sitekey %>" data-callback="onPassed" data-expired-callback="onExpired"></div>
+			</center>
+		</form>
+	</div>
+	<div class="footer">
+		<p><a href="../verify/logout">Logout</a>
+		</p>
+	</div>
+	<script>
+		function onPassed() {
+                document.getElementById("recaptchaForm").submit(); 
+            }
+      function onExpired() {
+        location.reload();
+      }
+	</script>
+</body>
+
+</html>

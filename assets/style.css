@@ -1,0 +1,39 @@
+.main {
+  font-family: Arial, Helvetica, sans-serif, sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  margin: 0 auto;
+  width: 100%;
+  text-align: center;
+  color: black;
+  margin-top: 6%;
+}
+.footer {
+  font-family: Arial, Helvetica, sans-serif, sans-serif;
+  font-style: normal;
+  font-weight: 200;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  color: black;
+  text-align: center;
+}
+.verified {
+        font-family: Arial, Helvetica, sans-serif, sans-serif;
+  font-weight: 200;
+  font-style: normal;
+        margin: 0 auto;
+        width: 100%;
+        text-align: center;
+        margin-top: 15%;
+      }
+.error_success {
+        font-family: Arial, Helvetica, sans-serif, sans-serif;
+  font-weight: 200;
+  font-style: normal;
+        margin: 0 auto;
+        width: 100%;
+        text-align: center;
+        margin-top: 15%;
+      }
