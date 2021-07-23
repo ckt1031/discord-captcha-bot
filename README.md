@@ -16,7 +16,7 @@ This is an advanced reCaptcha verification system for new members in discord ser
   "dark_theme"              : String - "light" or "dark" in verify page theme.
   "verifiedrole_id"         : String - Your Server Verified Role ID.
   "client_id"               : String - Your Client ID.
-  "callback_url"                  : url - Your website url. Example: "https://example.com/verify"
+  "callback_url"            : url - Your website url. Example: "https://example.com/verify"
 }
 ```
 `.env` options (without any spaces, new value to new line)
