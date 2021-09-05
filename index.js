@@ -1,7 +1,11 @@
 "use strict";
 
-const Discord = require("discord.js");
-const client = new Discord.Client();
+const { Client, Intents, MessageEmbed } = require("discord.js");
+const client = new Client({
+  partials: ["MESSAGE", "CHANNEL", "REACTION"],
+  allowedMentions: { parse: ["users", "roles"], repliedUser: true },
+  intents: new Intents(32767)
+});
 const config = require("./config.json");
 
 client.login(process.env.TOKEN);
@@ -12,13 +16,13 @@ client.on("ready", () => {
 });
 
 client.on("guildMemberAdd", member => {
-  const embed = new Discord.MessageEmbed()
-    .setTitle("Verification")
-    .setDescription(
-      `Please solve reCAPTCHA here:${
-        config.callback_url
-      }\nBefore accessing to the server!`
-    );
+  const embed = new MessageEmbed();
+  embed.setTitle("Verification")
+  embed.setDescription(
+    `Please solve reCAPTCHA here:${
+    config.callback_url
+    }\nBefore accessing to the server!`
+  );
   member.send(embed);
 });
 

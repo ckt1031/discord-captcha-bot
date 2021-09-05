@@ -1,14 +1,14 @@
 "use strict";
 
 const express = require("express");
-const Discord = require("discord.js");
+const { MessageEmbed } = require("discord.js");
 const bodyParser = require("body-parser");
 const config = require("./config.json");
 const server = express();
 server.engine("html", require("ejs").renderFile);
 server.use(bodyParser.urlencoded({ extended: true }));
-var session = require("express-session");
-var compression = require("compression");
+const session = require("express-session");
+const compression = require("compression");
 const request = require("request");
 
 server.use(compression());
@@ -47,7 +47,7 @@ server.get(`/verify`, async (req, res) => {
     }
   };
 
-  request(options, function(error, response, body) {
+  request(options, function (error, response, body) {
     if (error) throw new Error(error);
     var oauth_parsed = JSON.parse(body);
     var options = {
@@ -55,7 +55,7 @@ server.get(`/verify`, async (req, res) => {
       url: "https://discord.com/api/users/@me",
       headers: { authorization: `Bearer ${oauth_parsed.access_token}` }
     };
-    request(options, async function(error, response, body) {
+    request(options, async function (error, response, body) {
       if (error) throw new Error(error);
       if (req.session.verify_userid) {
         return res.render(__dirname + "/html/captcha.html", {
@@ -65,9 +65,9 @@ server.get(`/verify`, async (req, res) => {
       if (response.statusCode != 200) {
         return res.redirect(
           `https://discord.com/oauth2/authorize?client_id=${
-            config.client_id
+          config.client_id
           }&redirect_uri=${
-            config.callback_url
+          config.callback_url
           }&response_type=code&scope=guilds.join%20email%20identify`
         );
       }
@@ -119,12 +119,12 @@ server.post("/verify/solve/", async (req, res) => {
       response: req.body["g-recaptcha-response"]
     }
   };
-  request(options, async function(error, response, body) {
+  request(options, async function (error, response, body) {
     if (error) throw new Error(error);
     const parsed = JSON.parse(body);
     console.log(parsed);
     if (parsed.success) {
-      const embed = new Discord.MessageEmbed();
+      const embed = new MessageEmbed();
       let guildGet = client.guilds.cache.get(config.server_id);
       let userfetch = await client.users.fetch(req.session.verify_userid);
       const member = await guildGet.members.fetch(userfetch.id);
@@ -134,7 +134,7 @@ server.post("/verify/solve/", async (req, res) => {
         embed.setTitle(":white_check_mark: Verified");
         embed.setDescription("Now you can access to the server!");
         embed.setColor("GREEN");
-        await member.send(embed);
+        await member.send({ embeds: [embed] });
         return res.redirect("/verify/succeed");
       } catch (e) {
         return res.redirect("/verify/succeed");

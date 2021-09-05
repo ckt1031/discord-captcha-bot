@@ -2,7 +2,7 @@
 This is an advanced reCaptcha verification system for new members in discord server.
 
 ## Requirements!
-- NodeJS v12 Server
+- NodeJS v16.6.1 Server
 - A Discord Application with bot account
 - Google reCAPTCHA v2 API
 
