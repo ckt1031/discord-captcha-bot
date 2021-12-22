@@ -1,28 +1,37 @@
 {
-  "name": "discord-recaptcha",
-  "version": "1.0.0",
+  "name": "discord-captcha",
+  "version": "1.1.0",
   "description": "This is an advanced reCaptcha verification system for new members in discord server.",
-  "main": "index.js",
-  "scripts": {
-    "start": "node index.js"
-  },
+  "license": "ISC",
+  "author": "RealKoolisw",
+  "homepage": "https://github.com/RealKoolisw/discord-captcha#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/RealKoolisw/discord-reCAPTCHA.git"
+    "url": "git+https://github.com/RealKoolisw/discord-captcha.git"
   },
-  "author": "",
-  "license": "ISC",
   "bugs": {
-    "url": "https://github.com/RealKoolisw/discord-reCAPTCHA/issues"
+    "url": "https://github.com/RealKoolisw/discord-captcha/issues"
   },
-  "homepage": "https://github.com/RealKoolisw/discord-reCAPTCHA#readme",
+  "main": "index.js",
+  "scripts": {
+    "format": "prettier --write .",
+    "start": "node index.js",
+    "update": "ncu -u"
+  },
   "dependencies": {
-    "body-parser": "^1.19.0",
+    "body-parser": "^1.19.1",
     "compression": "^1.7.4",
-    "discord.js": "^13.1.0",
+    "discord.js": "^13.3.1",
     "ejs": "^3.1.6",
-    "express": "^4.17.1",
+    "express": "^4.17.2",
     "express-session": "^1.17.2",
     "request": "^2.88.2"
+  },
+  "devDependencies": {
+    "npm-check-updates": "^12.0.5",
+    "prettier": "^2.5.1"
+  },
+  "engines": {
+    "node": ">=16.x"
   }
 }

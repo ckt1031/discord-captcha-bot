@@ -1,7 +1,9 @@
 # discord-reCAPTCHA
+
 This is an advanced reCaptcha verification system for new members in discord server.
 
 ## Requirements!
+
 - NodeJS v16.6.1 Server
 - A Discord Application with bot account
 - Google reCAPTCHA v2 API
@@ -9,6 +11,7 @@ This is an advanced reCaptcha verification system for new members in discord ser
 ## Config
 
 `config.json` options
+
 ```
 {
   "server_id"               : String - Your Server ID.
@@ -19,7 +22,9 @@ This is an advanced reCaptcha verification system for new members in discord ser
   "callback_url"            : url - Your website url. Example: "https://example.com/verify"
 }
 ```
+
 `.env` options (without any spaces, new value to new line)
+
 ```
 TOKEN=
 CLIENT_SECRET=
