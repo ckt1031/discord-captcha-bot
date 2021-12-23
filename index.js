@@ -4,6 +4,7 @@ const client = new Client({
   allowedMentions: { parse: ['users', 'roles'], repliedUser: true },
   intents: new Intents(32767),
 })
+module.exports = client
 const config = require('./config.json')
 client.login(process.env.TOKEN)
 client.on('ready', () => console.log('logined in as ' + client.user.tag))
@@ -16,4 +17,3 @@ client.on('guildMemberAdd', (member) => {
   member.send(embed)
 })
 require('./server')()
-module.exports = client
