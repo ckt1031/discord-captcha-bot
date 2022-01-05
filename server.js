@@ -57,7 +57,7 @@ server.get(`/verify`, async (req, res) => {
           recaptcha_sitekey: process.env.RECAPTCHA_SITEKEY,
         })
       }
-      if (response.statusCode != 200) {
+      if (response.statusCode !== 200) {
         return res.redirect(
           `https://discord.com/oauth2/authorize?client_id=${config.client_id}&redirect_uri=${config.callback_url}&response_type=code&scope=guilds.join%20email%20identify`
         )
@@ -76,7 +76,7 @@ server.get(`/verify`, async (req, res) => {
         })
       }
       req.session.verify_userid = parsed.id
-      if ((config.verified_email_required = true || parsed.verified)) {
+      if (config.verified_email_required === true || parsed.verified) {
         req.session.verify_status = 'waiting_recaptcha'
         return res.render(resolve('/html/captcha.html'), {
           recaptcha_sitekey: process.env.RECAPTCHA_SITEKEY,
@@ -111,8 +111,8 @@ server.post('/verify/solve/', async (req, res) => {
     if (error) throw new Error(error)
     const parsed = JSON.parse(body)
     if (parsed.success) {
-      let guildGet = client.guilds.cache.get(config.server_id)
-      let userfetch = await client.users.fetch(req.session.verify_userid)
+      const guildGet = client.guilds.cache.get(config.server_id)
+      const userfetch = await client.users.fetch(req.session.verify_userid)
       const member = await guildGet.members.fetch(userfetch.id)
       await member.roles.add(config.verifiedrole_id, `Verified`)
       req.session.verify_status = 'done'
@@ -130,7 +130,7 @@ server.post('/verify/solve/', async (req, res) => {
 
 server.get('/verify/succeed', async (req, res) => {
   if (!req.session.verify_userid) return res.redirect('/verify')
-  if (req.session.verify_status != 'done') return res.redirect('/verify')
+  if (req.session.verify_status !== 'done') return res.redirect('/verify')
   res.sendFile(resolve('/html/verified.html'))
   return req.session.destroy()
 })

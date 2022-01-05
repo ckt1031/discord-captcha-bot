@@ -16,6 +16,7 @@
   "main": "index.js",
   "scripts": {
     "format": "prettier --write .",
+    "lint": "eslint --fix .",
     "start": "node --use-strict index.js",
     "update": "ncu -u"
   },
@@ -29,7 +30,8 @@
     "request": "^2.88.2"
   },
   "devDependencies": {
-    "npm-check-updates": "^12.0.5",
+    "eslint": "^8.6.0",
+    "npm-check-updates": "^12.1.0",
     "prettier": "^2.5.1"
   },
   "engines": {

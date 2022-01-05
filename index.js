@@ -18,4 +18,4 @@ client.on('guildMemberAdd', (member) => {
     )
   member.send(embed)
 })
-require('./server')()
+require('./server')

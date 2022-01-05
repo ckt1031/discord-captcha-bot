@@ -1,7 +1,7 @@
 {
+  "callback_url": "",
+  "client_id": "",
   "server_id": "",
   "verified_email_required": true,
-  "verifiedrole_id": "",
-  "client_id": "",
-  "callback_url": ""
+  "verifiedrole_id": ""
 }
