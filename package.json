@@ -1,5 +1,5 @@
 {
-  "private": "true",
+  "private": true,
   "name": "discord-captcha",
   "version": "1.1.0",
   "description": "This is an advanced reCaptcha verification system for new members in discord server.",
@@ -16,7 +16,8 @@
   "main": "index.js",
   "scripts": {
     "format": "prettier --write .",
-    "lint": "eslint --fix .",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
     "start": "node --use-strict index.js",
     "update": "ncu -u"
   },

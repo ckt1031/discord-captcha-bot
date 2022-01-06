@@ -21,7 +21,7 @@ jobs:
           node-version: '16'
 
       - name: Install Package(s)
-        run: npm i && npm i -g eslint
+        run: npm i
 
       - name: Check Code Problem(s)
-        run: npx eslint .
+        run: npm run lint
