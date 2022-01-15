@@ -53,7 +53,7 @@ server.get(`/verify`, async (req, res) => {
     request(options, async function (error, response, body) {
       if (error) throw new Error(error)
       if (req.session.verify_userid) {
-        return res.render(resolve('/html/captcha.html'), {
+        return res.render(resolve('./html/captcha.html'), {
           recaptcha_sitekey: process.env.RECAPTCHA_SITEKEY,
         })
       }
@@ -71,19 +71,19 @@ server.get(`/verify`, async (req, res) => {
       const userguild = guildGet.member(userfetch)
 
       if (userguild.roles.cache.has(config.verifiedrole_id)) {
-        return res.render(resolve('/html/success.html'), {
+        return res.render(resolve('./html/success.html'), {
           success_msg: 'You already verified!',
         })
       }
       req.session.verify_userid = parsed.id
       if (config.verified_email_required === true || parsed.verified) {
         req.session.verify_status = 'waiting_recaptcha'
-        return res.render(resolve('/html/captcha.html'), {
+        return res.render(resolve('./html/captcha.html'), {
           recaptcha_sitekey: process.env.RECAPTCHA_SITEKEY,
         })
       } else {
         await req.session.destroy()
-        return res.render(resolve('/html/error.html'), {
+        return res.render(resolve('./html/error.html'), {
           error_msg: 'Please verify your email!',
         })
       }
