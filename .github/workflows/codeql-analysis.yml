@@ -29,9 +29,14 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: 17
+          
+      - name: Setup PNPM Environment
+        uses: pnpm/action-setup@v2.0.1
+        with:
+          version: latest
 
       - name: Install Packages
-        run: npm install
+        run: pnpm install install
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v1
