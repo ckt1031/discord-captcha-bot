@@ -19,9 +19,14 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 17
+          
+      - name: Setup PNPM Environment
+        uses: pnpm/action-setup@v2.0.1
+        with:
+          version: latest
 
       - name: Install Package(s)
-        run: npm i
+        run: pnpm install
 
       - name: Check Code Problem(s)
-        run: npm run lint
+        run: pnpm run lint
