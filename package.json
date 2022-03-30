@@ -22,18 +22,18 @@
     "update": "ncu -u"
   },
   "dependencies": {
-    "body-parser": "^1.19.1",
+    "body-parser": "^1.19.2",
     "compression": "^1.7.4",
-    "discord.js": "^13.5.0",
+    "discord.js": "^13.6.0",
     "ejs": "^3.1.6",
-    "express": "^4.17.2",
+    "express": "^4.17.3",
     "express-session": "^1.17.2",
     "request": "^2.88.2"
   },
   "devDependencies": {
-    "eslint": "^8.6.0",
-    "npm-check-updates": "^12.1.0",
-    "prettier": "^2.5.1"
+    "eslint": "^8.12.0",
+    "npm-check-updates": "^12.5.4",
+    "prettier": "^2.6.1"
   },
   "engines": {
     "node": ">=16.x"
