@@ -16,11 +16,11 @@ client.login(process.env.TOKEN);
 
 client.on('ready', () => console.log('logined in as ' + client.user?.tag));
 
-client.on('guildMemberAdd', (member) => {
+client.on('guildMemberAdd', member => {
   const embed = new MessageEmbed()
     .setTitle('Verification')
     .setDescription(
-      `Please solve reCAPTCHA here:${config.callback_url}\nBefore accessing to the server!`
+      `Please solve reCAPTCHA here:${config.callback_url}\nBefore accessing to the server!`,
     );
 
   member.send({ embeds: [embed] });

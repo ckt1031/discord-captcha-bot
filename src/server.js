@@ -73,7 +73,7 @@ server.get(`/verify`, async (req, res) => {
           recaptcha_sitekey: process.env.RECAPTCHA_SITEKEY,
         });
 
-        return
+        return;
       }
 
       if (response.statusCode !== 200) {
@@ -81,7 +81,7 @@ server.get(`/verify`, async (req, res) => {
           `https://discord.com/oauth2/authorize?client_id=${config.client_id}&redirect_uri=${config.callback_url}&response_type=code&scope=guilds.join%20email%20identify`,
         );
 
-        return
+        return;
       }
 
       const parsed = JSON.parse(body);
@@ -101,7 +101,7 @@ server.get(`/verify`, async (req, res) => {
           messageText: 'You already verified!',
         });
 
-        return
+        return;
       }
 
       if (userguild.roles.cache.has(config.verifiedrole_id)) {
@@ -109,7 +109,7 @@ server.get(`/verify`, async (req, res) => {
           messageText: 'You already verified!',
         });
 
-        return
+        return;
       }
 
       req.session.verify_userid = parsed.id;
@@ -119,13 +119,11 @@ server.get(`/verify`, async (req, res) => {
         res.render(resolve('./html/captcha.html'), {
           recaptcha_sitekey: process.env.RECAPTCHA_SITEKEY,
         });
-
       } else {
-        req.session.destroy(() => { });
+        req.session.destroy(() => {});
         res.render(resolve('./html/error.html'), {
           messageText: 'Please verify your email!',
         });
-
       }
     });
   });
@@ -162,7 +160,7 @@ server.post('/verify/solve/', async (req, res) => {
       if (!fetchedGuild) {
         res.redirect('/verify');
 
-        return
+        return;
       }
 
       const member = await fetchedGuild.members.fetch(userfetch.id);
@@ -176,7 +174,7 @@ server.post('/verify/solve/', async (req, res) => {
         .setDescription('Now you can access to the server!')
         .setColor('GREEN');
 
-      member.send({ embeds: [embed] }).catch(() => { });
+      member.send({ embeds: [embed] }).catch(() => {});
 
       res.redirect('/verify/succeed');
     } else {
@@ -191,8 +189,7 @@ server.get('/verify/succeed', async (req, res) => {
 
   res.sendFile(resolve('/html/verified.html'));
 
-  req.session.destroy(() => { });
-
+  req.session.destroy(() => {});
 });
 
 server.get('/verify/logout', async (req, res) => {
@@ -204,7 +201,7 @@ server.get('/verify/logout', async (req, res) => {
     return;
   }
 
-  req.session.destroy(() => { });
+  req.session.destroy(() => {});
 
   res.render(resolve('/html/success.html'), {
     messageText: `Done logout!`,
