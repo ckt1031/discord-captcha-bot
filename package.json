@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "discord-captcha",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "description": "This is an advanced reCaptcha verification system for new members in discord server.",
   "license": "ISC",
   "author": "RealKoolisw",
@@ -18,22 +18,21 @@
     "format": "prettier --write .",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
-    "start": "node --use-strict index.js",
-    "update": "ncu -u"
+    "start": "node --use-strict index.js"
   },
   "dependencies": {
-    "body-parser": "^1.19.2",
+    "axios": "^0.27.2",
+    "body-parser": "^1.20.0",
     "compression": "^1.7.4",
-    "discord.js": "^13.6.0",
-    "ejs": "^3.1.6",
-    "express": "^4.17.3",
-    "express-session": "^1.17.2",
+    "discord.js": "^13.8.0",
+    "ejs": "^3.1.7",
+    "express": "^4.18.1",
+    "express-session": "^1.17.3",
     "request": "^2.88.2"
   },
   "devDependencies": {
-    "eslint": "^8.12.0",
-    "npm-check-updates": "^12.5.4",
-    "prettier": "^2.6.1"
+    "eslint": "^8.17.0",
+    "prettier": "^2.6.2"
   },
   "engines": {
     "node": ">=16.x"
