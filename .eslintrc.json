@@ -10,7 +10,6 @@
   },
   "rules": {
     "semi": [2, "always"],
-    "sort-imports": [2, "always"],
     "eqeqeq": 2
   }
 }

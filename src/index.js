@@ -1,5 +1,5 @@
 // @ts-check
-require('dotenv').config()
+require('dotenv').config();
 
 const { Client, Intents, MessageEmbed } = require('discord.js');
 
