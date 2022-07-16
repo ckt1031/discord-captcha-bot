@@ -1,47 +1,47 @@
 // @ts-check
 
-const { resolve } = require('path');
+const { resolve } = require('path')
 
-const { MessageEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js')
 
-const request = require('request');
+const request = require('request')
 
-const express = require('express');
-const session = require('express-session');
-const bodyParser = require('body-parser');
-const compression = require('compression');
+const express = require('express')
+const session = require('express-session')
+const bodyParser = require('body-parser')
+const compression = require('compression')
 
-const client = require('./index');
-const config = require('../config.json');
+const client = require('./index')
+const config = require('../config.json')
 
-const server = express();
+const server = express()
 
-server.set('trust proxy', 1);
-server.disable('x-powered-by');
+server.set('trust proxy', 1)
+server.disable('x-powered-by')
 
-server.use(compression());
-server.use(bodyParser.urlencoded({ extended: true }));
+server.use(compression())
+server.use(bodyParser.urlencoded({ extended: true }))
 
-server.engine('html', require('ejs').renderFile);
+server.engine('html', require('ejs').renderFile)
 
 server.use(
   session({
     name: 'sitedata',
     rolling: true,
-    secret: `EfT4AVq9r-F,.FRclHc#Y##QJNT^^fY#3Wxd#ci8Z@KrE`,
+    secret: 'EfT4AVq9r-F,.FRclHc#Y##QJNT^^fY#3Wxd#ci8Z@KrE',
     resave: true,
     proxy: true,
     saveUninitialized: true,
-    cookie: { maxAge: 60000 * 60 * 12, secure: true },
-  }),
-);
+    cookie: { maxAge: 60000 * 60 * 12, secure: true }
+  })
+)
 
-server.use(express.static('assets'));
+server.use(express.static('assets'))
 
-server.all('/', (req, res) => res.send('Bot is Running!'));
+server.all('/', (req, res) => res.send('Bot is Running!'))
 
-server.get(`/verify`, async (req, res) => {
-  var options = {
+server.get('/verify', async (req, res) => {
+  const options = {
     method: 'POST',
     url: 'https://discord.com/api/oauth2/token',
     headers: { 'content-type': 'application/x-www-form-urlencoded' },
@@ -51,161 +51,161 @@ server.get(`/verify`, async (req, res) => {
       grant_type: 'authorization_code',
       code: req.query.code,
       redirect_uri: config.callback_url,
-      scope: ['identify', 'email', 'guilds.join'],
-    },
-  };
+      scope: ['identify', 'email', 'guilds.join']
+    }
+  }
 
   request(options, function (error, _, body) {
-    if (error) throw new Error(error);
-    var oauth_parsed = JSON.parse(body);
+    if (error) throw new Error(error)
+    const oauth_parsed = JSON.parse(body)
 
-    var options = {
+    const options = {
       method: 'GET',
       url: 'https://discord.com/api/users/@me',
-      headers: { authorization: `Bearer ${oauth_parsed.access_token}` },
-    };
+      headers: { authorization: `Bearer ${oauth_parsed.access_token}` }
+    }
 
     request(options, async function (error, response, body) {
-      if (error) throw new Error(error);
+      if (error) throw new Error(error)
 
       if (req.session.verify_userid) {
         res.render(resolve('./html/captcha.html'), {
-          recaptcha_sitekey: process.env.RECAPTCHA_SITEKEY,
-        });
+          recaptcha_sitekey: process.env.RECAPTCHA_SITEKEY
+        })
 
-        return;
+        return
       }
 
       if (response.statusCode !== 200) {
         res.redirect(
-          `https://discord.com/oauth2/authorize?client_id=${config.client_id}&redirect_uri=${config.callback_url}&response_type=code&scope=guilds.join%20email%20identify`,
-        );
+          `https://discord.com/oauth2/authorize?client_id=${config.client_id}&redirect_uri=${config.callback_url}&response_type=code&scope=guilds.join%20email%20identify`
+        )
 
-        return;
+        return
       }
 
-      const parsed = JSON.parse(body);
+      const parsed = JSON.parse(body)
 
-      const fetchedGuild = client.guilds.cache.get(config.server_id);
+      const fetchedGuild = client.guilds.cache.get(config.server_id)
 
-      const userfetch = await client.users.fetch(parsed.id);
+      const userfetch = await client.users.fetch(parsed.id)
 
       await fetchedGuild?.members.add(userfetch, {
-        accessToken: oauth_parsed.access_token,
-      });
+        accessToken: oauth_parsed.access_token
+      })
 
-      const userguild = await fetchedGuild?.members.fetch(userfetch);
+      const userguild = await fetchedGuild?.members.fetch(userfetch)
 
       if (!userguild) {
         res.render(resolve('./html/error.html'), {
-          messageText: 'You already verified!',
-        });
+          messageText: 'You already verified!'
+        })
 
-        return;
+        return
       }
 
       if (userguild.roles.cache.has(config.verifiedrole_id)) {
         res.render(resolve('./html/success.html'), {
-          messageText: 'You already verified!',
-        });
+          messageText: 'You already verified!'
+        })
 
-        return;
+        return
       }
 
-      req.session.verify_userid = parsed.id;
+      req.session.verify_userid = parsed.id
 
       if (config.verified_email_required === true || parsed.verified) {
-        req.session.verify_status = 'waiting_recaptcha';
+        req.session.verify_status = 'waiting_recaptcha'
         res.render(resolve('./html/captcha.html'), {
-          recaptcha_sitekey: process.env.RECAPTCHA_SITEKEY,
-        });
+          recaptcha_sitekey: process.env.RECAPTCHA_SITEKEY
+        })
       } else {
-        req.session.destroy(() => {});
+        req.session.destroy(() => {})
         res.render(resolve('./html/error.html'), {
-          messageText: 'Please verify your email!',
-        });
+          messageText: 'Please verify your email!'
+        })
       }
-    });
-  });
-});
+    })
+  })
+})
 
 server.post('/verify/solve/', async (req, res) => {
   if (!req.session.verify_userid || !req.body['g-recaptcha-response']) {
-    return res.redirect('/verify');
+    return res.redirect('/verify')
   }
 
-  var options = {
+  const options = {
     method: 'POST',
     url: 'https://www.google.com/recaptcha/api/siteverify',
     headers: {
       'content-type':
-        'multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW',
+        'multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW'
     },
     formData: {
       secret: process.env.RECAPTCHA_SECRET,
-      response: req.body['g-recaptcha-response'],
-    },
-  };
+      response: req.body['g-recaptcha-response']
+    }
+  }
 
   request(options, async (error, _, body) => {
-    if (error) throw new Error(error);
+    if (error) throw new Error(error)
 
-    const parsed = JSON.parse(body);
+    const parsed = JSON.parse(body)
 
     if (parsed.success) {
-      const fetchedGuild = client.guilds.cache.get(config.server_id);
+      const fetchedGuild = client.guilds.cache.get(config.server_id)
 
-      const userfetch = await client.users.fetch(req.session.verify_userid);
+      const userfetch = await client.users.fetch(req.session.verify_userid)
 
       if (!fetchedGuild) {
-        res.redirect('/verify');
+        res.redirect('/verify')
 
-        return;
+        return
       }
 
-      const member = await fetchedGuild.members.fetch(userfetch.id);
+      const member = await fetchedGuild.members.fetch(userfetch.id)
 
-      await member.roles.add(config.verifiedrole_id, `Verified`);
+      await member.roles.add(config.verifiedrole_id, 'Verified')
 
-      req.session.verify_status = 'done';
+      req.session.verify_status = 'done'
 
       const embed = new MessageEmbed()
         .setTitle(':white_check_mark: Verified')
         .setDescription('Now you can access to the server!')
-        .setColor('GREEN');
+        .setColor('GREEN')
 
-      member.send({ embeds: [embed] }).catch(() => {});
+      member.send({ embeds: [embed] }).catch(() => {})
 
-      res.redirect('/verify/succeed');
+      res.redirect('/verify/succeed')
     } else {
-      res.redirect('/verify');
+      res.redirect('/verify')
     }
-  });
-});
+  })
+})
 
 server.get('/verify/succeed', async (req, res) => {
-  if (!req.session.verify_userid) return res.redirect('/verify');
-  if (req.session.verify_status !== 'done') return res.redirect('/verify');
+  if (!req.session.verify_userid) return res.redirect('/verify')
+  if (req.session.verify_status !== 'done') return res.redirect('/verify')
 
-  res.sendFile(resolve('/html/verified.html'));
+  res.sendFile(resolve('/html/verified.html'))
 
-  req.session.destroy(() => {});
-});
+  req.session.destroy(() => {})
+})
 
 server.get('/verify/logout', async (req, res) => {
   if (!req.session.verify_userid) {
     res.render(resolve('/html/error.html'), {
-      messageText: `You did not login!`,
-    });
+      messageText: 'You did not login!'
+    })
 
-    return;
+    return
   }
 
-  req.session.destroy(() => {});
+  req.session.destroy(() => {})
 
   res.render(resolve('/html/success.html'), {
-    messageText: `Done logout!`,
-  });
-});
+    messageText: 'Done logout!'
+  })
+})
 
-server.listen(process.env.PORT || 8080);
+server.listen(process.env.PORT || 8080)
