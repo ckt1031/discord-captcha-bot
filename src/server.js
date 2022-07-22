@@ -2,14 +2,13 @@
 
 const { resolve } = require('path');
 
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 
 const request = require('request');
 
 const express = require('express');
 const session = require('express-session');
 const bodyParser = require('body-parser');
-const compression = require('compression');
 
 const client = require('./index');
 const config = require('../config.json');
@@ -17,9 +16,7 @@ const config = require('../config.json');
 const server = express();
 
 server.set('trust proxy', 1);
-server.disable('x-powered-by');
 
-server.use(compression());
 server.use(bodyParser.urlencoded({ extended: true }));
 
 server.engine('html', require('ejs').renderFile);
@@ -169,10 +166,10 @@ server.post('/verify/solve/', async (req, res) => {
 
       req.session.verify_status = 'done';
 
-      const embed = new MessageEmbed()
+      const embed = new EmbedBuilder()
         .setTitle(':white_check_mark: Verified')
         .setDescription('Now you can access to the server!')
-        .setColor('GREEN');
+        .setColor('Green');
 
       member.send({ embeds: [embed] }).catch(() => {});
 

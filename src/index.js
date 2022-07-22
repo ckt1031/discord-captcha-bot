@@ -1,14 +1,29 @@
 // @ts-check
 require('dotenv').config();
 
-const { Client, Intents, MessageEmbed } = require('discord.js');
-
+const {
+  Client,
+  GatewayIntentBits,
+  Partials,
+  EmbedBuilder,
+} = require('discord.js');
 const config = require('../config.json');
 
 const client = new Client({
-  partials: ['MESSAGE', 'CHANNEL', 'REACTION'],
   allowedMentions: { parse: ['users', 'roles'], repliedUser: true },
-  intents: new Intents(32767),
+  partials: [
+    Partials.User,
+    Partials.Channel,
+    Partials.Message,
+    Partials.GuildMember,
+  ],
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMembers,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.DirectMessages,
+    GatewayIntentBits.MessageContent,
+  ],
 });
 
 module.exports = client;
@@ -18,7 +33,7 @@ client.login(process.env.TOKEN);
 client.on('ready', () => console.log('logined in as ' + client.user?.tag));
 
 client.on('guildMemberAdd', member => {
-  const embed = new MessageEmbed()
+  const embed = new EmbedBuilder()
     .setTitle('Verification')
     .setDescription(
       `Please solve reCAPTCHA here:${config.callback_url}\nBefore accessing to the server!`,
