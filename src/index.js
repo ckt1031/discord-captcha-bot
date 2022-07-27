@@ -1,13 +1,14 @@
 // @ts-check
-require('dotenv').config()
+
+require('dotenv').config();
 
 const {
   Client,
   GatewayIntentBits,
   Partials,
-  EmbedBuilder
-} = require('discord.js')
-const config = require('../config.json')
+  EmbedBuilder,
+} = require('discord.js');
+const config = require('../config.json');
 
 const client = new Client({
   allowedMentions: { parse: ['users', 'roles'], repliedUser: true },
@@ -15,31 +16,31 @@ const client = new Client({
     Partials.User,
     Partials.Channel,
     Partials.Message,
-    Partials.GuildMember
+    Partials.GuildMember,
   ],
   intents: [
     GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMembers,
     GatewayIntentBits.GuildMessages,
     GatewayIntentBits.DirectMessages,
-    GatewayIntentBits.MessageContent
-  ]
-})
+    GatewayIntentBits.MessageContent,
+  ],
+});
 
-module.exports = client
+module.exports = client;
 
-client.login(process.env.TOKEN)
+client.login(process.env.TOKEN);
 
-client.on('ready', () => console.log('logined in as ' + client.user?.tag))
+client.on('ready', () => console.log('logined in as ' + client.user?.tag));
 
 client.on('guildMemberAdd', member => {
   const embed = new EmbedBuilder()
     .setTitle('Verification')
     .setDescription(
-      `Please solve reCAPTCHA here:${config.callback_url}\nBefore accessing to the server!`
-    )
+      `Please solve reCAPTCHA here:${config.callback_url}\nBefore accessing to the server!`,
+    );
 
-  member.send({ embeds: [embed] })
-})
+  member.send({ embeds: [embed] });
+});
 
-require('./server')
+require('./server');

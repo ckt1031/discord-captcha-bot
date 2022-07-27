@@ -1,18 +1,9 @@
 {
   "private": true,
   "name": "discord-captcha",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "This is an advanced reCaptcha verification system for new members in discord server.",
-  "license": "ISC",
-  "author": "RealKoolisw",
-  "homepage": "https://github.com/RealKoolisw/discord-captcha#readme",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/RealKoolisw/discord-captcha.git"
-  },
-  "bugs": {
-    "url": "https://github.com/RealKoolisw/discord-captcha/issues"
-  },
+  "author": "cktsun1031",
   "main": "index.js",
   "scripts": {
     "lint": "eslint --fix . && prettier -w .",
