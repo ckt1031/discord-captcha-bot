@@ -1,5 +1,3 @@
-// @ts-check
-
 const { resolve } = require('path');
 
 const { EmbedBuilder } = require('discord.js');
