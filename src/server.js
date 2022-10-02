@@ -1,3 +1,5 @@
+// @ts-check
+
 const { resolve } = require('path');
 
 const { EmbedBuilder } = require('discord.js');
@@ -27,7 +29,7 @@ server.use(
     resave: true,
     proxy: true,
     saveUninitialized: true,
-    cookie: { maxAge: 60000 * 60 * 12, secure: true },
+    cookie: { maxAge: 60000 * 60 * 12 },
   }),
 );
 
@@ -45,7 +47,7 @@ server.get('/verify', async (req, res) => {
       client_secret: process.env.CLIENT_SECRET,
       grant_type: 'authorization_code',
       code: req.query.code,
-      redirect_uri: config.callback_url,
+      redirect_uri: process.env.CALLBACK_URL,
       scope: ['identify', 'email', 'guilds.join'],
     },
   };
@@ -74,7 +76,7 @@ server.get('/verify', async (req, res) => {
 
       if (response.statusCode !== 200) {
         res.redirect(
-          `https://discord.com/oauth2/authorize?client_id=${config.client_id}&redirect_uri=${config.callback_url}&response_type=code&scope=guilds.join%20email%20identify`,
+          `https://discord.com/oauth2/authorize?client_id=${process.env.CLIENT_ID}&redirect_uri=${process.env.CALLBACK_URL}&response_type=code&scope=guilds.join%20email%20identify`,
         );
 
         return;
@@ -82,7 +84,7 @@ server.get('/verify', async (req, res) => {
 
       const parsed = JSON.parse(body);
 
-      const fetchedGuild = client.guilds.cache.get(config.server_id);
+      const fetchedGuild = client.guilds.cache.get(process.env.SERVER_ID);
 
       const userfetch = await client.users.fetch(parsed.id);
 
@@ -126,6 +128,7 @@ server.get('/verify', async (req, res) => {
 });
 
 server.post('/verify/solve/', async (req, res) => {
+  console.log(req.session.verify_userid);
   if (!req.session.verify_userid || !req.body['g-recaptcha-response']) {
     return res.redirect('/verify');
   }
@@ -149,7 +152,7 @@ server.post('/verify/solve/', async (req, res) => {
     const parsed = JSON.parse(body);
 
     if (parsed.success) {
-      const fetchedGuild = client.guilds.cache.get(config.server_id);
+      const fetchedGuild = client.guilds.cache.get(process.env.SERVER_ID);
 
       const userfetch = await client.users.fetch(req.session.verify_userid);
 
@@ -183,14 +186,14 @@ server.get('/verify/succeed', async (req, res) => {
   if (!req.session.verify_userid) return res.redirect('/verify');
   if (req.session.verify_status !== 'done') return res.redirect('/verify');
 
-  res.sendFile(resolve('/html/verified.html'));
+  res.sendFile(resolve('./html/verified.html'));
 
   req.session.destroy(() => undefined);
 });
 
 server.get('/verify/logout', async (req, res) => {
   if (!req.session.verify_userid) {
-    res.render(resolve('/html/error.html'), {
+    res.render(resolve('./html/error.html'), {
       messageText: 'You did not login!',
     });
 
@@ -199,7 +202,7 @@ server.get('/verify/logout', async (req, res) => {
 
   req.session.destroy(() => undefined);
 
-  res.render(resolve('/html/success.html'), {
+  res.render(resolve('./html/success.html'), {
     messageText: 'Done logout!',
   });
 });

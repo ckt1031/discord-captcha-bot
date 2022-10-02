@@ -6,7 +6,6 @@ const {
   Partials,
   EmbedBuilder,
 } = require('discord.js');
-const config = require('../config.json');
 
 const client = new Client({
   allowedMentions: { parse: ['users', 'roles'], repliedUser: true },
@@ -35,7 +34,7 @@ client.on('guildMemberAdd', member => {
   const embed = new EmbedBuilder()
     .setTitle('Verification')
     .setDescription(
-      `Please solve reCAPTCHA here:${config.callback_url}\nBefore accessing to the server!`,
+      `Please solve reCAPTCHA here:${process.env.CALLBACK_URL}\nBefore accessing to the server!`,
     );
 
   member.send({ embeds: [embed] });
