@@ -8,7 +8,6 @@ This is an advanced reCaptcha verification system for new members in discord ser
 - NPM version with 7.0 or later
 - A Discord Application with bot account
 - Google reCAPTCHA v2 API
--
 
 ## Result
 
