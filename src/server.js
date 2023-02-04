@@ -1,6 +1,6 @@
 // @ts-check
 
-const { resolve } = require('path');
+const { resolve } = require('node:path');
 
 const { EmbedBuilder } = require('discord.js');
 
@@ -17,6 +17,7 @@ const server = express();
 
 server.set('trust proxy', 1);
 
+server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({ extended: true }));
 
 server.engine('html', require('ejs').renderFile);
@@ -25,7 +26,7 @@ server.use(
   session({
     name: 'sitedata',
     rolling: true,
-    secret: 'EfT4AVq9r-F,.FRclHc#Y##QJNT^^fY#3Wxd#ci8Z@KrE',
+    secret: 'EfT4AVq9r-F,.FRclHc#Y##QJNT^^fY#3Wxd#ci8Z@KrE', // TODO: Change this to your own secret
     resave: true,
     proxy: true,
     saveUninitialized: true,
@@ -151,7 +152,7 @@ server.post('/verify/solve/', async (req, res) => {
 
     const parsed = JSON.parse(body);
 
-    if (parsed.success) {
+    if (parsed.success && req.session.verify_userid) {
       const fetchedGuild = client.guilds.cache.get(process.env.SERVER_ID);
 
       const userfetch = await client.users.fetch(req.session.verify_userid);

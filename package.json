@@ -16,11 +16,12 @@
     "ejs": "3.1.8",
     "express": "4.18.2",
     "express-session": "1.17.3",
-    "request": "2.88.2"
+    "request": "2.88.2",
+    "zod": "^3.20.2"
   },
   "devDependencies": {
-    "eslint": "8.31.0",
-    "prettier": "2.8.2"
+    "eslint": "8.33.0",
+    "prettier": "2.8.3"
   },
   "engines": {
     "node": ">=16.9.0"

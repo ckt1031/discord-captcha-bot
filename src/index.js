@@ -1,6 +1,7 @@
 // @ts-check
 
 require('dotenv').config();
+require('./validate-env');
 
 const {
   Client,
@@ -33,6 +34,11 @@ client.login(process.env.TOKEN);
 client.on('ready', () => console.log('logined in as ' + client.user?.tag));
 
 client.on('guildMemberAdd', member => {
+  /**
+   * You can use this code to send a message to the member
+   * when they join the server.
+   * PLEASE NOTE: Change the message to your own message.
+   */
   const embed = new EmbedBuilder()
     .setTitle('Verification')
     .setDescription(
