@@ -9,6 +9,9 @@ const EnvironmentVariableSchema = z.object({
   RECAPTCHA_SECRET: z.string(),
 
   SERVER_ID: z.string(),
+
+  REQUIRE_VERIFIED_EMAIL: z.string(),
+  VERIFIED_ROLE_ID: z.string(),
 });
 
 EnvironmentVariableSchema.parse(process.env);

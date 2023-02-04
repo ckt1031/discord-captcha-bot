@@ -11,7 +11,6 @@ const session = require('express-session');
 const bodyParser = require('body-parser');
 
 const client = require('./index');
-const config = require('../config.json');
 
 const server = express();
 
@@ -103,7 +102,7 @@ server.get('/verify', async (req, res) => {
         return;
       }
 
-      if (userguild.roles.cache.has(config.verifiedrole_id)) {
+      if (userguild.roles.cache.has(process.env.VERIFIED_ROLE_ID)) {
         res.render(resolve('./html/success.html'), {
           messageText: 'You already verified!',
         });
@@ -113,7 +112,7 @@ server.get('/verify', async (req, res) => {
 
       req.session.verify_userid = parsed.id;
 
-      if (config.verified_email_required === true || parsed.verified) {
+      if (process.env.REQUIRE_VERIFIED_EMAIL === 'true' || parsed.verified) {
         req.session.verify_status = 'waiting_recaptcha';
         res.render(resolve('./html/captcha.html'), {
           recaptcha_sitekey: process.env.RECAPTCHA_SITEKEY,
@@ -165,7 +164,7 @@ server.post('/verify/solve/', async (req, res) => {
 
       const member = await fetchedGuild.members.fetch(userfetch.id);
 
-      await member.roles.add(config.verifiedrole_id, 'Verified');
+      await member.roles.add(process.env.VERIFIED_ROLE_ID, 'Verified');
 
       req.session.verify_status = 'done';
 
