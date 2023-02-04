@@ -32,7 +32,7 @@ A powerful, advanced captcha verification system for new members in a Discord se
 - `CALLBACK_URL` - The URL of the server `https://[your domain]/verify` (e.g. `https://example.com/verify`)
 - `REQUIRE_VERIFIED_EMAIL` - Whether to require a verified email address for the user to pass the captcha (default: `false`)
 - `VERIFIED_ROLE_ID` - The ID of the role to give to the user after they pass the captcha (Right click on the role -> Copy ID)
-  
+
 > Register new Recaptcha v2 API key [here](https://www.google.com/recaptcha/admin/create)
 
 - `RECAPTCHA_SITEKEY` - The site key of your Google reCAPTCHA v2 API key (Settings -> reCAPTCHA keys -> Copy Site key)

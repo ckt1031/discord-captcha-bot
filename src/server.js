@@ -8,6 +8,7 @@ const request = require('request');
 
 const express = require('express');
 const session = require('express-session');
+const rateLimit = require('express-rate-limit');
 const bodyParser = require('body-parser');
 
 const client = require('./index');
@@ -15,6 +16,16 @@ const client = require('./index');
 const server = express();
 
 server.set('trust proxy', 1);
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 5, // 15 minutes
+  max: 20, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
+  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+});
+
+// Apply the rate limiting middleware to all requests
+server.use(limiter);
 
 server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({ extended: true }));
