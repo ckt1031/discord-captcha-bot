@@ -1,14 +1,18 @@
-# discord-reCAPTCHA
+# Discord CAPTCHA Site
 
-This is an advanced reCaptcha verification system for new members in discord server.
+A powerful, advanced captcha verification system for new members in a Discord server.
 
-## Requirements!
+## Technologies Used
 
-- NodeJS verson with 16.9.0 or later
-- NPM version with 7.0 or later
-- A Discord Application with bot account
-- Google reCAPTCHA v2 API
+- [Google reCAPTCHA v2](https://developers.google.com/recaptcha/docs/display) API
+- [Node.js](https://nodejs.org)
+- [NPM](https://npmjs.com)
+- [Express](https://expressjs.com)
+- [Discord.js](https://discord.js.org)
 
-## Result
+## System Requirements
 
-https://user-images.githubusercontent.com/65409152/193441607-50d3728b-0db6-4057-85c6-1ba28ac2c005.mp4
+- Node.js version 16.9.0 or later (**Recommended:** Latest LTS)
+- NPM version 7.0 or later (**Recommended:** Latest)
+- A Discord Application with a bot account
+- A Google reCAPTCHA v2 API key
