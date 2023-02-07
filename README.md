@@ -42,10 +42,11 @@ A powerful, advanced captcha verification system for new members in a Discord se
 
 1. Start the server with `npm start` or `yarn start`
 2. Add the bot to your server with `https://discord.com/api/oauth2/authorize?client_id=[CLIENT_ID]&permissions=8&scope=bot%20applications.commands`
-3. Adding the bot to your server will automatically create a new role called `Verified` and a new channel called `#verify`
-4. The bot will automatically send a message in the `#verify` channel with a link to the captcha verification page
-5. The user will have to complete the captcha
-6. After the user completes the captcha, they will be given the `Verified` role and notified in the DMs
+3. In `Oauth2 -> Redirects` add the callback URL `https://[your domain]/verify` (e.g. `https://example.com/verify`)
+4. Adding the bot to your server will automatically create a new role called `Verified` and a new channel called `#verify`
+5. The bot will automatically send a message in the `#verify` channel with a link to the captcha verification page
+6. The user will have to complete the captcha
+7. After the user completes the captcha, they will be given the `Verified` role and notified in the DMs
 
 ## Production Deployment
 
@@ -53,6 +54,12 @@ A powerful, advanced captcha verification system for new members in a Discord se
 2. Start the server with `pm2 start ecosystem.config.js`
 3. Run command `pm2 start --max-memory-restart 300M --attach npm -- run start`
 4. (Optional) Run command `pm2 startup` to enable startup on boot
+
+# Screenshots
+
+## Captcha Verification Page
+
+![Captcha Verification Page](./screenshots/verify-page.png)
 
 ## FAQ
 
