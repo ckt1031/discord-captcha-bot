@@ -36,11 +36,11 @@ server.use(
   session({
     name: 'sitedata',
     rolling: true,
-    secret: 'EfT4AVq9r-F,.FRclHc#Y##QJNT^^fY#3Wxd#ci8Z@KrE', // TODO: Change this to your own secret
+    secret: 'USE_YOUR_OWN_SECRETS', // TODO: Change this to your own secret
     resave: true,
     proxy: true,
     saveUninitialized: true,
-    cookie: { maxAge: 60000 * 60 * 12 },
+    cookie: { maxAge: 60000 * 60 * 12, secure: true },
   }),
 );
 
