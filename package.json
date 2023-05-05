@@ -22,7 +22,7 @@
   },
   "devDependencies": {
     "@types/express-rate-limit": "^6.0.0",
-    "eslint": "8.39.0",
+    "eslint": "8.40.0",
     "prettier": "2.8.8"
   },
   "engines": {
