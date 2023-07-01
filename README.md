@@ -17,6 +17,22 @@ A powerful, advanced captcha verification system for new members in a Discord se
 - A Discord Application with a bot account
 - A Google reCAPTCHA v2 API key
 
+## Docker setup
+
+If you want to run this application without installing Node.js or other tools, you can use Docker to run it. Usage:
+```
+docker run \
+-e VERIFIED_ROLE_ID=x \
+-e REQUIRE_VERIFIED_EMAIL=x \
+-e SERVER_ID=x \
+-e RECAPTCHA_SECRET=x \
+-e RECAPTCHA_SITEKEY=x \
+-e CALLBACK_URL=x \
+-e CLIENT_SECRET=x \
+-e TOKEN=x \
+ghcr.io/ckt1031/discord-captcha-site
+```
+
 ## Installation
 
 1. Clone the repository
