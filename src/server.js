@@ -2,7 +2,8 @@
 
 const { resolve } = require('node:path');
 
-const { EmbedBuilder } = require('discord.js');
+// eslint-disable-next-line no-unused-vars
+const { EmbedBuilder, GuildMember } = require('discord.js');
 
 const qs = require('qs');
 // eslint-disable-next-line no-unused-vars
@@ -43,7 +44,7 @@ server.use(
     resave: true,
     proxy: true,
     saveUninitialized: true,
-    cookie: { maxAge: 60000 * 60 * 12, secure: true },
+    cookie: { maxAge: 60000 * 60 * 12, secure: "auto" },
   }),
 );
 
@@ -67,80 +68,115 @@ server.get('/verify', async (req, res) => {
     }),
   };
 
-  const response = await axios(oauthApiOptions);
+  try {
+    const response = await axios(oauthApiOptions);
 
+    const oauth_parsed = response.data;
 
-  const oauth_parsed = response.data;
+    /** @type {Axios.AxiosRequestConfig} */
+    const apiUserOptions = {
+      method: 'GET',
+      url: 'https://discord.com/api/users/@me',
+      headers: { authorization: `Bearer ${oauth_parsed.access_token}` },
+    };
 
-  /** @type {Axios.AxiosRequestConfig} */
-  const apiUserOptions = {
-    method: 'GET',
-    url: 'https://discord.com/api/users/@me',
-    headers: { authorization: `Bearer ${oauth_parsed.access_token}` },
-  };
+    const response2 = await axios(apiUserOptions);
 
-  const response2 = await axios(apiUserOptions);
+    const parsed = response2.data;
 
-  const parsed = response2.data;
+    let fetchedGuild = client.guilds.cache.get(process.env.SERVER_ID);
 
-  const fetchedGuild = client.guilds.cache.get(process.env.SERVER_ID);
+    if (!fetchedGuild) {
+      fetchedGuild = await client.guilds.fetch(process.env.SERVER_ID);
+    }
 
-  const userfetch = await client.users.fetch(parsed.id);
+    /** @type {GuildMember} */
+    let userfetch;
 
-  await fetchedGuild?.members.add(userfetch, {
-    accessToken: oauth_parsed.access_token,
-  });
+    try {
+      userfetch = await fetchedGuild.members.fetch(parsed.id);
+    } catch {
+      const userObject = await client.users.fetch(parsed.id);
+      userfetch = await fetchedGuild.members.add(userObject, {
+        accessToken: oauth_parsed.access_token,
+      });
+    }
 
-  const userguild = await fetchedGuild?.members.fetch(userfetch);
+    if (userfetch.roles.cache.has(process.env.VERIFIED_ROLE_ID)) {
+      res.render(resolve('./html/success.html'), {
+        messageText: 'You already verified!',
+      });
 
-  if (!userguild) {
-    res.render(resolve('./html/error.html'), {
-      messageText: 'You already verified!',
-    });
+      return;
+    }
 
-    return;
-  }
+    req.session.verify_userid = userfetch.id;
 
-  if (userguild.roles.cache.has(process.env.VERIFIED_ROLE_ID)) {
-    res.render(resolve('./html/success.html'), {
-      messageText: 'You already verified!',
-    });
+    if (process.env.REQUIRE_VERIFIED_EMAIL === 'true' || parsed.verified) {
+      req.session.verify_status = 'waiting_captcha';
 
-    return;
-  }
+      let sitekey = process.env.RECAPTCHA_SITEKEY;
+      let captcha_provider_script = 'https://www.google.com/recaptcha/api.js';
 
-  req.session.verify_userid = parsed.id;
+      if (process.env.CAPTCHA_PROVIDER === 'hcaptcha') {
+        sitekey = process.env.HCAPTCHA_SITEKEY;
+        captcha_provider_script = 'https://js.hcaptcha.com/1/api.js';
+      }
 
-  if (process.env.REQUIRE_VERIFIED_EMAIL === 'true' || parsed.verified) {
-    req.session.verify_status = 'waiting_recaptcha';
-    res.render(resolve('./html/captcha.html'), {
-      recaptcha_sitekey: process.env.RECAPTCHA_SITEKEY,
-    });
-  } else {
-    req.session.destroy(() => undefined);
-    res.render(resolve('./html/error.html'), {
-      messageText: 'Please verify your email!',
-    });
+      if (process.env.CAPTCHA_PROVIDER === 'turnstile') {
+        sitekey = process.env.TURNSTILE_SITEKEY;
+        captcha_provider_script = 'https://challenges.cloudflare.com/turnstile/v0/api.js?compat=recaptcha';
+      }
+
+      res.render(resolve('./html/captcha.html'), {
+        captcha_provider: process.env.CAPTCHA_PROVIDER,
+        captcha_provider_script,
+        captcha_sitekey: sitekey,
+      });
+    } else {
+      req.session.destroy(() => undefined);
+      res.render(resolve('./html/error.html'), {
+        messageText: 'Please verify your email!',
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    res.redirect(
+      `https://discord.com/oauth2/authorize?client_id=${client.application?.id}&redirect_uri=${process.env.CALLBACK_URL}&response_type=code&scope=guilds.join%20email%20identify`,
+    );
   }
 });
 
-server.post('/verify/solve/', async (req, res) => {
-  console.log(req.session.verify_userid);
-  if (!req.session.verify_userid || !req.body['g-recaptcha-response']) {
+server.post('/verify/solve', async (req, res) => {
+  let response_body_field = 'g-recaptcha-response';
+  let captha_server = 'https://www.google.com/recaptcha/api/siteverify';
+  let captcha_secret = process.env.RECAPTCHA_SECRET;
+
+  if (process.env.CAPTCHA_PROVIDER === 'hcaptcha') {
+    response_body_field = 'h-captcha-response';
+    captha_server = 'https://hcaptcha.com/siteverify';
+    captcha_secret = process.env.HCAPTCHA_SECRET;
+  }
+
+  if (process.env.CAPTCHA_PROVIDER === 'turnstile') {
+    response_body_field = 'g-recaptcha-response';
+    captha_server = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
+    captcha_secret = process.env.TURNSTILE_SECRET;
+  }
+
+  console.log(req.session.verify_userid, req.body[response_body_field]);
+
+  if (!req.session.verify_userid || !req.body[response_body_field]) {
     return res.redirect('/verify');
   }
 
   /** @type {Axios.AxiosRequestConfig} */
   const options = {
     method: 'POST',
-    url: 'https://www.google.com/recaptcha/api/siteverify',
-    headers: {
-      'content-type':
-        'multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW',
-    },
+    url: captha_server,
     data: qs.stringify({
-      secret: process.env.RECAPTCHA_SECRET,
-      response: req.body['g-recaptcha-response'],
+      secret: captcha_secret,
+      response: req.body[response_body_field],
     }),
   };
 

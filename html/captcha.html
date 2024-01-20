@@ -4,7 +4,7 @@
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script src="<%= captcha_provider_script %>" async defer></script>
     <link rel="stylesheet" href="../style.css" />
   </head>
 
@@ -12,15 +12,14 @@
     <div class="main">
       <h1>Verification</h1>
       <h4>
-        Please solve the reCAPTCHA following below to make sure you are not a
+        Please solve the <%= captcha_provider %> following below to make sure you are not a
         robot.
       </h4>
-      <form action="/verify/solve" method="POST" id="recaptchaForm">
+      <form action="/verify/solve" method="POST" id="captcha_verification">
         <center>
           <div
-            id="recaptcha_box"
-            class="g-recaptcha"
-            data-sitekey="<%= recaptcha_sitekey %>"
+            class="g-recaptcha h-captcha cf-turnstile"
+            data-sitekey="<%= captcha_sitekey %>"
             data-callback="onPassed"
             data-expired-callback="onExpired"></div>
         </center>
@@ -31,7 +30,7 @@
     </div>
     <script>
       function onPassed() {
-        document.getElementById('recaptchaForm').submit();
+        document.getElementById('captcha_verification').submit();
       }
       function onExpired() {
         location.reload();

@@ -42,7 +42,7 @@ client.on('guildMemberAdd', member => {
   const embed = new EmbedBuilder()
     .setTitle('Verification')
     .setDescription(
-      `Please solve reCAPTCHA here:${process.env.CALLBACK_URL}\nBefore accessing to the server!`,
+      `Please solve captcha here:${process.env.CALLBACK_URL}\nBefore accessing to the server!`,
     );
 
   member.send({ embeds: [embed] });

@@ -23,10 +23,15 @@ If you want to run this application without installing Node.js or other tools, y
 ```
 docker run \
 -e VERIFIED_ROLE_ID=x \
+-e CAPTCHA_PROVIDER=x \
 -e REQUIRE_VERIFIED_EMAIL=x \
 -e SERVER_ID=x \
 -e RECAPTCHA_SECRET=x \
 -e RECAPTCHA_SITEKEY=x \
+-e HCAPTCHA_SITEKEY=x \
+-e HCAPTCHA_SECRET=x \
+-e TURNSTILE_SITEKEY=x \
+-e TURNSTILE_SECRET=x \
 -e CALLBACK_URL=x \
 -e CLIENT_SECRET=x \
 -e TOKEN=x \
@@ -51,8 +56,16 @@ ghcr.io/ckt1031/discord-captcha-site
 
 > Register new Recaptcha v2 API key [here](https://www.google.com/recaptcha/admin/create)
 
+- `CAPTCHA_PROVIDER` - The captcha provider to use (default: `recaptcha`), available options: `recaptcha`, `hcaptcha`
+
+> Above options are only required if you are using specified captcha provider
+
 - `RECAPTCHA_SITEKEY` - The site key of your Google reCAPTCHA v2 API key (Settings -> reCAPTCHA keys -> Copy Site key)
 - `RECAPTCHA_SECRET` - The secret key of your Google reCAPTCHA v2 API key (Settings -> reCAPTCHA keys -> Copy Secret key)
+- `HCAPTCHA_SITEKEY` - The site key of your hCaptcha API key (Site -> Site key)
+- `HCAPTCHA_SECRET` - The secret key of your hCaptcha API key (Settings -> Secret key)
+- `TURNSTILE_SITEKEY` - The site key of your Turnstile API key (Turnstile -> Site -> Site key)
+- `TURNSTILE_SECRET` - The secret key of your Turnstile API key (Turnstile -> Site -> Secret key)
 
 ## Usage
 
@@ -76,36 +89,3 @@ ghcr.io/ckt1031/discord-captcha-site
 ## Captcha Verification Page
 
 ![Captcha Verification Page](./screenshots/verify-page.png)
-
-## FAQ
-
-1. **What is ZodError?**
-
-```bash
-ZodError: [
-  {
-    "code": "invalid_type",
-    "expected": "string",
-    "received": "undefined",
-    "path": [
-      "REQUIRE_VERIFIED_EMAIL"
-    ],
-    "message": "Required"
-  },
-  {
-    "code": "invalid_type",
-    "expected": "string",
-    "received": "undefined",
-    "path": [
-      "VERIFIED_ROLE_ID"
-    ],
-    "message": "Required"
-  }
-]
-```
-
-This error is caused by missing environment variables. Make sure you have set all the environment variables correctly and **add environment variables following to the `path` in the error message.**
-
-From the example above, you need to add `REQUIRE_VERIFIED_EMAIL` and `VERIFIED_ROLE_ID` to the environment variables.
-
-Please follow the [Environment Variables](#environment-variables) section for more information.

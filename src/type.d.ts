@@ -11,6 +11,6 @@ declare global {
 declare module 'express-session' {
   export interface SessionData {
     verify_userid: string;
-    verify_status: 'waiting_recaptcha' | 'done';
+    verify_status: 'waiting_captcha' | 'done';
   }
 }
