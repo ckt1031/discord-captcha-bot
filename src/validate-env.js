@@ -1,19 +1,19 @@
-const { z } = require('zod');
+const { object, parse, string } = require('valibot');
 
-const EnvironmentVariableSchema = z.object({
-  TOKEN: z.string(),
-  CLIENT_SECRET: z.string(),
-  CALLBACK_URL: z.string(),
+const EnvironmentVariableSchema = object({
+  TOKEN: string(),
+  CLIENT_SECRET: string(),
+  CALLBACK_URL: string(),
 
-  RECAPTCHA_SITEKEY: z.string(),
-  RECAPTCHA_SECRET: z.string(),
+  RECAPTCHA_SITEKEY: string(),
+  RECAPTCHA_SECRET: string(),
 
-  SERVER_ID: z.string(),
+  SERVER_ID: string(),
 
-  REQUIRE_VERIFIED_EMAIL: z.string(),
-  VERIFIED_ROLE_ID: z.string(),
+  REQUIRE_VERIFIED_EMAIL: string(),
+  VERIFIED_ROLE_ID: string(),
 });
 
-EnvironmentVariableSchema.parse(process.env);
+parse(EnvironmentVariableSchema, process.env);
 
 module.exports = { EnvironmentVariableSchema };
