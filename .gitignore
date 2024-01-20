@@ -18,3 +18,4 @@ replit.nix
 .env.production.local
 /cache/
 package-lock.json
+bun.lockb
