@@ -4,9 +4,8 @@ A powerful, advanced captcha verification system for new members in a Discord se
 
 ## Technologies Used
 
-- [Google reCAPTCHA v2](https://developers.google.com/recaptcha/docs/display) API
+- [Google reCAPTCHA v2](https://developers.google.com/recaptcha/docs/display), [hCAPTCHA](https://www.hcaptcha.com) and [Cloudflare Turnstile](https://www.cloudflare.com/products/turnstile)
 - [Node.js](https://nodejs.org)
-- [NPM](https://npmjs.com)
 - [Express](https://expressjs.com)
 - [Discord.js](https://discord.js.org)
 
@@ -15,7 +14,7 @@ A powerful, advanced captcha verification system for new members in a Discord se
 - Node.js version 16.9.0 or later (**Recommended:** Latest LTS)
 - NPM version 7.0 or later (**Recommended:** Latest)
 - A Discord Application with a bot account
-- A Google reCAPTCHA v2 API key
+- CAPTCHA provider API sitekey and secret.
 
 ## Docker setup
 
