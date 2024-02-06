@@ -19,7 +19,7 @@
     "express-rate-limit": "7.1.5",
     "express-session": "1.17.3",
     "qs": "6.11.2",
-    "valibot": "0.26.0"
+    "valibot": "0.28.1"
   },
   "devDependencies": {
     "@types/express-rate-limit": "6.0.0",
