@@ -19,6 +19,7 @@ A powerful, advanced captcha verification system for new members in a Discord se
 ## Docker setup
 
 If you want to run this application without installing Node.js or other tools, you can use Docker to run it. Usage:
+
 ```
 docker run \
 -e VERIFIED_ROLE_ID=x \
@@ -34,13 +35,13 @@ docker run \
 -e CALLBACK_URL=x \
 -e CLIENT_SECRET=x \
 -e TOKEN=x \
-ghcr.io/ckt1031/discord-captcha-site
+ghcr.io/ckt1031/discord-captcha-bot
 ```
 
 ## Installation
 
 1. Clone the repository
-2. Install the dependencies with `npm install` or `yarn`
+2. Install the dependencies with `npm install`
 
 ## Environment Variables
 
@@ -76,15 +77,14 @@ ghcr.io/ckt1031/discord-captcha-site
 6. The user will have to complete the captcha
 7. After the user completes the captcha, they will be given the `Verified` role and notified in the DMs
 
-## Production Deployment
-
-1. Install [PM2](https://pm2.keymetrics.io) with `npm install pm2 -g` or `yarn global add pm2`
-2. Start the server with `pm2 start ecosystem.config.js`
-3. Run command `pm2 start --max-memory-restart 300M --attach npm -- run start`
-4. (Optional) Run command `pm2 startup` to enable startup on boot
-
 # Screenshots
 
 ## Captcha Verification Page
 
-![Captcha Verification Page](./screenshots/verify-page.png)
+Light Mode:
+
+![Captcha Verification Page](https://imgur.com/VnCbk5V.png)
+
+Dark Mode:
+
+![Captcha Verification Page (Dark)](https://imgur.com/ory13FX.png)

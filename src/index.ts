@@ -1,14 +1,8 @@
-// @ts-check
+import './validate-env';
+import 'dotenv/config';
+import './server';
 
-require('dotenv').config();
-require('./validate-env');
-
-const {
-  Client,
-  GatewayIntentBits,
-  Partials,
-  EmbedBuilder,
-} = require('discord.js');
+import { Client, GatewayIntentBits, Partials, EmbedBuilder } from 'discord.js';
 
 const client = new Client({
   allowedMentions: { parse: ['users', 'roles'], repliedUser: true },
@@ -27,13 +21,11 @@ const client = new Client({
   ],
 });
 
-module.exports = client;
-
 client.login(process.env.TOKEN);
 
-client.on('ready', () => console.log('logined in as ' + client.user?.tag));
+client.on('ready', () => console.log('Login in as ' + client.user?.tag));
 
-client.on('guildMemberAdd', member => {
+client.on('guildMemberAdd', async member => {
   /**
    * You can use this code to send a message to the member
    * when they join the server.
@@ -42,10 +34,10 @@ client.on('guildMemberAdd', member => {
   const embed = new EmbedBuilder()
     .setTitle('Verification')
     .setDescription(
-      `Please solve captcha here:${process.env.CALLBACK_URL}\nBefore accessing to the server!`,
+      `Please solve captcha here: ${process.env.CALLBACK_URL}\nBefore accessing to the server!`,
     );
 
-  member.send({ embeds: [embed] });
+  await member.send({ embeds: [embed] });
 });
 
-require('./server');
+export default client;

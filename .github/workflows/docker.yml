@@ -26,6 +26,6 @@ jobs:
       - name: Build and Publish head Docker image
         uses: VaultVulp/gp-docker-action@1.6.0
         with:
-            github-token: ${{ secrets.GITHUB_TOKEN }}
-            image-name: discord-captcha-site
-            image-tag: ${{ github.ref_name }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          image-name: discord-captcha-bot
+          image-tag: ${{ github.ref_name }}

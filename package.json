@@ -1,31 +1,40 @@
 {
   "private": true,
   "name": "discord-captcha",
-  "version": "0.0.0",
-  "description": "A simple captcha (reCAPTCHA v2/v3, hCaptcha, Turnstile) verification bot for Discord.",
+  "version": "2.0.0",
+  "description": "A simple captcha (reCAPTCHA v2, hCaptcha, Turnstile) verification bot for Discord.",
   "author": "ckt1031",
-  "main": "src/index.js",
+  "main": "src/index.ts",
   "scripts": {
-    "lint": "eslint --fix . && prettier -w .",
-    "start": "node src/index.js"
+    "lint": "tsc --noEmit && eslint --fix . && prettier -w .",
+    "dev": "tsx src/index.ts",
+    "build": "esbuild src/index.ts --bundle --platform=node --outdir=dist"
   },
   "dependencies": {
-    "axios": "^1.6.7",
-    "body-parser": "1.20.2",
-    "discord.js": "14.14.1",
+    "axios": "^1.7.7",
+    "body-parser": "1.20.3",
+    "discord.js": "14.16.3",
     "dotenv": "16.4.5",
-    "ejs": "3.1.9",
-    "express": "4.18.3",
-    "express-rate-limit": "7.2.0",
-    "express-session": "1.18.0",
-    "qs": "6.12.0",
-    "valibot": "0.30.0"
+    "ejs": "3.1.10",
+    "express": "4.21.1",
+    "express-rate-limit": "7.4.1",
+    "express-session": "1.18.1",
+    "qs": "6.13.0",
+    "valibot": "0.42.1"
   },
   "devDependencies": {
+    "@eslint/js": "^9.12.0",
+    "@types/ejs": "^3.1.5",
+    "@types/express": "^5.0.0",
     "@types/express-rate-limit": "6.0.0",
-    "@types/qs": "^6.9.11",
-    "eslint": "8.57.0",
-    "prettier": "3.2.5"
+    "@types/express-session": "^1.18.0",
+    "@types/qs": "^6.9.16",
+    "esbuild": "^0.24.0",
+    "eslint": "^9.12.0",
+    "globals": "^15.10.0",
+    "prettier": "3.3.3",
+    "tsx": "^4.19.1",
+    "typescript-eslint": "^8.8.1"
   },
   "engines": {
     "node": ">=16.9.0"

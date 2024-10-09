@@ -1,37 +1,50 @@
-<html>
+<html lang="en">
   <head>
     <title>Verification</title>
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
     <script src="<%= captcha_provider_script %>" async defer></script>
-    <link rel="stylesheet" href="../style.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        // Use system dark mode
+        darkMode: 'media',
+      };
+    </script>
   </head>
 
-  <body>
-    <div class="main">
-      <h1>Verification</h1>
-      <h4>
-        Please solve the <%= captcha_provider %> following below to make sure you are not a
-        robot.
+  <body class="dark:bg-black">
+    <div class="h-screen flex flex-col items-center p-3">
+      <h1 class="mt-5 text-3xl font-bold dark:text-white">Verification</h1>
+      <h4 class="text-xl text-gray-600 dark:text-gray-400">
+        Please solve the <%= captcha_provider %> following below to make sure
+        you are not a robot.
       </h4>
-      <form action="/verify/solve" method="POST" id="captcha_verification">
-        <center>
-          <div
-            class="g-recaptcha h-captcha cf-turnstile"
-            data-sitekey="<%= captcha_sitekey %>"
-            data-callback="onPassed"
-            data-expired-callback="onExpired"></div>
-        </center>
+      <form
+        action="/verify/solve"
+        method="POST"
+        id="captcha_verification"
+        class="mt-5">
+        <div
+          class="g-recaptcha h-captcha cf-turnstile"
+          data-sitekey="<%= captcha_sitekey %>"
+          data-callback="onPassed"
+          data-expired-callback="onExpired"></div>
       </form>
-    </div>
-    <div class="footer">
-      <a href="../verify/logout">Logout</a>
+      <div class="mt-5">
+        <a
+          href="../verify/logout"
+          class="text-blue-500 dark:text-blue-400 hover:underline">
+          Logout
+        </a>
+      </div>
     </div>
     <script>
       function onPassed() {
         document.getElementById('captcha_verification').submit();
       }
+
       function onExpired() {
         location.reload();
       }

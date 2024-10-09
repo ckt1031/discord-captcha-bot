@@ -1,21 +1,25 @@
-<html>
+<html lang="en">
   <head>
-    <title>Error Occured!</title>
+    <title>Error Occurred!</title>
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-    <link rel="stylesheet" href="../style.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        // Use system dark mode
+        darkMode: 'media',
+      };
+    </script>
   </head>
 
-  <body>
-    <div class="error_success">
-      <center>
-        <img
-          src="../cross.png"
-          alt="Verified"
-          style="width: 100px; height: 100px" />
-        <h1><%= messageText %></h1>
-      </center>
+  <body class="dark:bg-black">
+    <div class="h-screen flex flex-col justify-center items-center">
+      <img
+        src="../cross.png"
+        alt="Verified"
+        class="w-[100px] h-[100px] mb-10" />
+      <h1 class="text-3xl font-bold text-red-500"><%= messageText %></h1>
     </div>
   </body>
 </html>

@@ -3,8 +3,7 @@ import { EnvironmentVariableSchema } from './validate-env';
 
 declare global {
   namespace NodeJS {
-    // eslint-disable-next-line @typescript-eslint/no-empty-interface
-    interface ProcessEnv extends Output<typeof EnvironmentVariableSchema> {}
+    type ProcessEnv = Output<typeof EnvironmentVariableSchema>;
   }
 }
 

@@ -1,11 +1,19 @@
-const { object, parse, string, enum_, optional } = require('valibot');
+import 'dotenv/config';
+import { object, parse, string, enum_, optional } from 'valibot';
+
+// As TypeScript enum
+enum CaptchaProvider {
+  HCAPTCHA = 'hcaptcha',
+  RECAPTCHA = 'recaptcha',
+  TURNSTILE = 'turnstile',
+}
 
 const EnvironmentVariableSchema = object({
   TOKEN: string(),
   CLIENT_SECRET: string(),
   CALLBACK_URL: string(),
 
-  CAPTCHA_PROVIDER: enum_(['hcaptcha', 'recaptcha', 'turnstile']),
+  CAPTCHA_PROVIDER: enum_(CaptchaProvider),
 
   RECAPTCHA_SITEKEY: optional(string()),
   RECAPTCHA_SECRET: optional(string()),
@@ -20,8 +28,10 @@ const EnvironmentVariableSchema = object({
 
   REQUIRE_VERIFIED_EMAIL: string(),
   VERIFIED_ROLE_ID: string(),
+
+  PORT: optional(string()),
 });
 
-parse(EnvironmentVariableSchema, process.env);
+const env = parse(EnvironmentVariableSchema, process.env);
 
-module.exports = { EnvironmentVariableSchema };
+export { env, EnvironmentVariableSchema };
